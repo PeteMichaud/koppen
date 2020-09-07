@@ -1,0 +1,16 @@
+/Users/pete/Projects/Sync/LandfallMap/koppen/Koppen/bin/Debug/netcoreapp2.2/Koppen.deps.json
+/Users/pete/Projects/Sync/LandfallMap/koppen/Koppen/bin/Debug/netcoreapp2.2/Koppen.runtimeconfig.json
+/Users/pete/Projects/Sync/LandfallMap/koppen/Koppen/bin/Debug/netcoreapp2.2/Koppen.runtimeconfig.dev.json
+/Users/pete/Projects/Sync/LandfallMap/Koppen/Koppen/bin/Debug/netcoreapp2.2/Koppen.dll
+/Users/pete/Projects/Sync/LandfallMap/Koppen/Koppen/bin/Debug/netcoreapp2.2/Koppen.pdb
+/Users/pete/Projects/Sync/LandfallMap/Koppen/Koppen/obj/Debug/netcoreapp2.2/Koppen.csprojAssemblyReference.cache
+/Users/pete/Projects/Sync/LandfallMap/Koppen/Koppen/obj/Debug/netcoreapp2.2/Koppen.csproj.CoreCompileInputs.cache
+/Users/pete/Projects/Sync/LandfallMap/Koppen/Koppen/obj/Debug/netcoreapp2.2/Koppen.AssemblyInfoInputs.cache
+/Users/pete/Projects/Sync/LandfallMap/Koppen/Koppen/obj/Debug/netcoreapp2.2/Koppen.AssemblyInfo.cs
+/Users/pete/Projects/Sync/LandfallMap/Koppen/Koppen/obj/Debug/netcoreapp2.2/Koppen.dll
+/Users/pete/Projects/Sync/LandfallMap/Koppen/Koppen/obj/Debug/netcoreapp2.2/Koppen.pdb
+/Users/pete/Projects/Sync/LandfallMap/Koppen/Koppen/bin/Debug/netcoreapp2.2/NUnit3.TestAdapter.dll
+/Users/pete/Projects/Sync/LandfallMap/Koppen/Koppen/bin/Debug/netcoreapp2.2/NUnit3.TestAdapter.pdb
+/Users/pete/Projects/Sync/LandfallMap/Koppen/Koppen/bin/Debug/netcoreapp2.2/nunit.engine.dll
+/Users/pete/Projects/Sync/LandfallMap/Koppen/Koppen/bin/Debug/netcoreapp2.2/nunit.engine.api.dll
+/Users/pete/Projects/Sync/LandfallMap/Koppen/Koppen/bin/Debug/netcoreapp2.2/nunit.engine.core.dll
