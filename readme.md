@@ -5,7 +5,7 @@ zones](https://en.wikipedia.org/wiki/K%C3%B6ppen_climate_classification).
 
 ## Usage
 
-* After all the follow setup is complete, simply run `./Koppen /absolute/path/to/working/directory`
+* After all the following setup is complete, simply run `./Koppen /absolute/path/to/working/directory`
     * When the program completes there will be an `output` directory inside the
       working directory, with a .png image per koppen zone. These can be 
       composited in your favorite image editor. 
@@ -19,8 +19,8 @@ zones](https://en.wikipedia.org/wiki/K%C3%B6ppen_climate_classification).
     * winterRain[.png]
     * summerTemperature[.png]
     * winterTemperature[.png]
-    * hottestTemperature[.png]
-    * coldestTemperature[.png]
+    * hottestTemperature[.png] (optional, will fall back to summerTemperature)
+    * coldestTemperature[.png] (optional, will fall back to summerTemperature)
  
 **Map Formatting Notes:**
 

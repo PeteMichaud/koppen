@@ -57,36 +57,27 @@ namespace Koppen
 
             }
 
+            string GetPrecipitationForCorD (WeatherSample s) {
+                if (s.RainfallSummer < s.RainfallWinter
+                 && s.RainfallWinter > 3 * s.RainfallSummer
+                 && s.RainfallSummer < 40)
+                    return "s";
+                else if (s.RainfallSummer > 10 * s.RainfallWinter)
+                    return "w";
+                else
+                    return "f";
+            }
+
             //Group C
             if (sample.TemperatureMin > 0) {
-
                 group = "C";
-
-                if (sample.RainfallSummer < sample.RainfallWinter
-                 && sample.RainfallWinter > 3 * sample.RainfallSummer
-                 && sample.RainfallSummer < 40)
-                    precipitation = "s";
-                else if (sample.RainfallSummer > 10 * sample.RainfallWinter)
-                    precipitation = "w";
-                else
-                    precipitation = "f";
-
+                precipitation = GetPrecipitationForCorD(sample);
             }
 
             //Group D
             if (sample.TemperatureMin <= 0) {
-
                 group = "D";
-
-                if (sample.RainfallSummer < sample.RainfallWinter
-                 && sample.RainfallWinter > 3 * sample.RainfallSummer
-                 && sample.RainfallSummer < 40)
-                    precipitation = "s";
-                else if (sample.RainfallSummer > 10 * sample.RainfallWinter)
-                    precipitation = "w";
-                else
-                    precipitation = "f";
-
+                precipitation = GetPrecipitationForCorD(sample);
             }
 
             if (sample.TemperatureMax >= 22)
