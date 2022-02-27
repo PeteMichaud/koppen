@@ -7,10 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Magick.NET-Q8-x64" Version="9.0.0" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
       <PackageReference Include="Microsoft.NETCore.DotNetAppHost" Version="6.0.1" />
       <PackageReference Include="NUnit" Version="3.13.2" />
       <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+      <PackageReference Include="SixLabors.ImageSharp" Version="2.0.0" />
     </ItemGroup>
 </Project>
