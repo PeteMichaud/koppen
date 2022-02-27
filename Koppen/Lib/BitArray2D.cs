@@ -15,11 +15,11 @@ namespace Koppen
             if(dimension2 <= 0) throw new ArgumentOutOfRangeException(nameof(dimension2), dimension2, string.Empty);
         }
 
-        public bool Get(int x, int y) { 
+        public new bool Get(int x, int y) { 
             CheckBounds(x, y);
             return base.Get(x, y);
         }
-        public bool Set(int x, int y, bool val) { 
+        public new bool Set(int x, int y, bool val) { 
             CheckBounds(x, y);
             return base.Set(x, y, val);
         }
