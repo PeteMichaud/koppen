@@ -124,7 +124,7 @@ namespace Koppen
 
                     var zone = KoppenClassifier.Classify(sample);
 
-                    climateMaps[zone][x, y] = true;
+                    climateMaps[zone].Add(new Vec2Int(x, y));// = true;
                 }
 
                 Console.WriteLine("0%");
@@ -187,7 +187,7 @@ namespace Koppen
             return pixels[x, y][COLOR_CHANNEL];
         }
 
-        static void SaveClimateZoneMaps(Dictionary<string, UnsafeBitArray2D> climateMaps, int imageWidth, int imageHeight) {
+        static void SaveClimateZoneMaps(Dictionary<string, List<Vec2Int>> climateMaps, int imageWidth, int imageHeight) {
             if (!Directory.Exists(_outDir))
                 Directory.CreateDirectory(_outDir);
 
@@ -200,18 +200,22 @@ namespace Koppen
 
         }
 
-        static void SaveClimateZoneMap(UnsafeBitArray2D climateMap, string zoneName, int w, int h) {
+        static void SaveClimateZoneMap(List<Vec2Int> climateMap, string zoneName, int w, int h) {
 
             using (var img = new MagickImage(MagickColors.Transparent, w,h)) {
                 using (var pixels = img.GetPixels())
                 {
-                    for (var x = 0; x < w; x++) {
-                        for (var y = 0; y < h; y++) {
-                            if (climateMap[x, y]) {
-                                pixels.SetPixel(x,y, ZoneColors[zoneName]);
-                            }
-                        }
+                    foreach(var zonePixel in climateMap)
+                    {
+                        pixels.SetPixel(zonePixel.x, zonePixel.y, ZoneColors[zoneName]);
                     }
+                    //for (var x = 0; x < w; x++) {
+                    //    for (var y = 0; y < h; y++) {
+                    //        if (climateMap[x, y]) {
+                    //            pixels.SetPixel(x,y, ZoneColors[zoneName]);
+                    //        }
+                    //    }
+                    //}
                 }
                 img.Write(Path.Join(_outDir, $"{zoneName}.png"));
             }
@@ -230,18 +234,30 @@ namespace Koppen
             return (byte)(pixelValue * RainScale);
         }
 
-        static Dictionary<string, UnsafeBitArray2D> InitializeClimateMaps(int width, int height) {
+        static Dictionary<string, List<Vec2Int>> InitializeClimateMaps(int width, int height) {
             // using UnsafeBitArray2D instead of bool[,] because bools are normally stored as 32bit values.
             // In normal use cases this means storing 31 climate maps each with 25000*12500=312,500,000 values,
             // totalling 1.25gb of data each
             // UnsafeBitArray2D reduces this to about 39mb each
-            var maps = new Dictionary<string, UnsafeBitArray2D>();
+            //var maps = new Dictionary<string, UnsafeBitArray2D>();
 
-            foreach (var zone in ZoneColors.Keys) {
-                maps[zone] = new UnsafeBitArray2D(width, height);
+            //foreach (var zone in ZoneColors.Keys) {
+            //    maps[zone] = new UnsafeBitArray2D(width, height);
+            //}
+
+            //return maps;
+
+            var maps = new Dictionary<string, List<Vec2Int>>();
+
+            //var initSize = width * height / 4; // estimate of max number of pixels for a given zone
+
+            foreach (var zone in ZoneColors.Keys)
+            {
+                maps[zone] = new List<Vec2Int>();
             }
 
             return maps;
+
         }
     }
 }
