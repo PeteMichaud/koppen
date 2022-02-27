@@ -20,7 +20,7 @@ zones](https://en.wikipedia.org/wiki/K%C3%B6ppen_climate_classification).
     * summerTemperature[.png]
     * winterTemperature[.png]
     * hottestTemperature[.png] (optional, will fall back to summerTemperature)
-    * coldestTemperature[.png] (optional, will fall back to summerTemperature)
+    * coldestTemperature[.png] (optional, will fall back to winterTemperature)
  
 **Map Formatting Notes:**
 
