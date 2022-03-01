@@ -27,13 +27,12 @@ namespace Koppen.Tests
                             coldestTemp < TempMax;
                             coldestTemp++) {
                             var sample = new WeatherSample(
-                                hemisphere: Hemisphere.North,
                                 summerRainfall: summerRainfall,
                                 winterRainfall: summerRainfall,
-                                summerTemp: hottestTemp,
-                                winterTemp: coldestTemp,
-                                hottestTemp: hottestTemp,
-                                coldestTemp: coldestTemp
+                                temperatureDuringSummer: hottestTemp,
+                                temperatureDuringWinter: coldestTemp,
+                                temperatureDuringGlobalHottest: hottestTemp,
+                                temperatureDuringGlobalColdest: coldestTemp
                             );
 
                             Assert.DoesNotThrow(
@@ -49,25 +48,23 @@ namespace Koppen.Tests
         public void EFTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 0,
                 winterRainfall: 0,
-                summerTemp: -1,
-                winterTemp: -1,
-                hottestTemp: -1,
-                coldestTemp: -1
+                temperatureDuringSummer: -1,
+                temperatureDuringWinter: -1,
+                temperatureDuringGlobalHottest: -1,
+                temperatureDuringGlobalColdest: -1
             );
 
             Assert.AreEqual("EF", Koppen.KoppenClassifier.Classify(sample));
 
             var cuspSample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 0,
                 winterRainfall: 0,
-                summerTemp: 0,
-                winterTemp: 0,
-                hottestTemp: 0,
-                coldestTemp: 0
+                temperatureDuringSummer: 0,
+                temperatureDuringWinter: 0,
+                temperatureDuringGlobalHottest: 0,
+                temperatureDuringGlobalColdest: 0
             );
 
             Assert.AreNotEqual("EF", Koppen.KoppenClassifier.Classify(cuspSample));
@@ -77,49 +74,45 @@ namespace Koppen.Tests
         public void ETTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 0,
                 winterRainfall: 0,
-                summerTemp: 5,
-                winterTemp: -10,
-                hottestTemp: 6,
-                coldestTemp: -10
+                temperatureDuringSummer: 5,
+                temperatureDuringWinter: -10,
+                temperatureDuringGlobalHottest: 6,
+                temperatureDuringGlobalColdest: -10
             );
 
             Assert.AreEqual("ET", Koppen.KoppenClassifier.Classify(sample));
 
             var lowCuspSample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 0,
                 winterRainfall: 0,
-                summerTemp: 0,
-                winterTemp: 0,
-                hottestTemp: 0,
-                coldestTemp: 0
+                temperatureDuringSummer: 0,
+                temperatureDuringWinter: 0,
+                temperatureDuringGlobalHottest: 0,
+                temperatureDuringGlobalColdest: 0
             );
 
             Assert.AreEqual("ET", Koppen.KoppenClassifier.Classify(lowCuspSample));
 
             var highCuspSample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 0,
                 winterRainfall: 0,
-                summerTemp: 9,
-                winterTemp: 9,
-                hottestTemp: 9,
-                coldestTemp: 9
+                temperatureDuringSummer: 9,
+                temperatureDuringWinter: 9,
+                temperatureDuringGlobalHottest: 9,
+                temperatureDuringGlobalColdest: 9
             );
 
             Assert.AreEqual("ET", Koppen.KoppenClassifier.Classify(highCuspSample));
 
             var overCuspSample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 0,
                 winterRainfall: 0,
-                summerTemp: 10,
-                winterTemp: 10,
-                hottestTemp: 10,
-                coldestTemp: 10
+                temperatureDuringSummer: 10,
+                temperatureDuringWinter: 10,
+                temperatureDuringGlobalHottest: 10,
+                temperatureDuringGlobalColdest: 10
             );
 
             Assert.AreNotEqual("ET", Koppen.KoppenClassifier.Classify(overCuspSample));
@@ -129,77 +122,71 @@ namespace Koppen.Tests
         [Test]
         public void GroupBTest() {
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 0,
                 winterRainfall: 0,
-                summerTemp: 10,
-                winterTemp: 10,
-                hottestTemp: 10,
-                coldestTemp: 10
+                temperatureDuringSummer: 10,
+                temperatureDuringWinter: 10,
+                temperatureDuringGlobalHottest: 10,
+                temperatureDuringGlobalColdest: 10
             );
 
             Assert.IsTrue(Koppen.KoppenClassifier.Classify(sample).StartsWith("B"));
 
             var desertSample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 7,
                 winterRainfall: 3,
-                summerTemp: 10,
-                winterTemp: 10,
-                hottestTemp: 10,
-                coldestTemp: 10
+                temperatureDuringSummer: 10,
+                temperatureDuringWinter: 10,
+                temperatureDuringGlobalHottest: 10,
+                temperatureDuringGlobalColdest: 10
             );
 
             Assert.AreEqual("BWh",
                 Koppen.KoppenClassifier.Classify(desertSample), desertSample.ToString());
 
             var steppeSample = new WeatherSample(
-                hemisphere: Hemisphere.North,
-                summerRainfall: 29,
-                winterRainfall: 13,
-                summerTemp: 10,
-                winterTemp: 10,
-                hottestTemp: 10,
-                coldestTemp: 10
+                summerRainfall: 23,
+                winterRainfall: 10,
+                temperatureDuringSummer: 10,
+                temperatureDuringWinter: 10,
+                temperatureDuringGlobalHottest: 10,
+                temperatureDuringGlobalColdest: 10
             );
 
             Assert.AreEqual("BSh",
                 Koppen.KoppenClassifier.Classify(steppeSample), steppeSample.ToString());
 
             var desertColdSample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 7,
                 winterRainfall: 3,
-                summerTemp: 10,
-                winterTemp: 10,
-                hottestTemp: 10,
-                coldestTemp: -1
+                temperatureDuringSummer: 10,
+                temperatureDuringWinter: 10,
+                temperatureDuringGlobalHottest: 10,
+                temperatureDuringGlobalColdest: -1
             );
 
             Assert.AreEqual("BWk",
                 Koppen.KoppenClassifier.Classify(desertColdSample), desertColdSample.ToString());
 
             var steppeColdSample = new WeatherSample(
-                hemisphere: Hemisphere.North,
-                summerRainfall: 29,
-                winterRainfall: 13,
-                summerTemp: 10,
-                winterTemp: 10,
-                hottestTemp: 10,
-                coldestTemp: -1
+                summerRainfall: 16,
+                winterRainfall: 6,
+                temperatureDuringSummer: 10,
+                temperatureDuringWinter: 10,
+                temperatureDuringGlobalHottest: 10,
+                temperatureDuringGlobalColdest: -1
             );
 
             Assert.AreEqual("BSk",
                 Koppen.KoppenClassifier.Classify(steppeColdSample), steppeColdSample.ToString());
 
             var steppeCuspSample = new WeatherSample(
-                hemisphere: Hemisphere.North,
-                summerRainfall: 29,
-                winterRainfall: 13,
-                summerTemp: 10,
-                winterTemp: 10,
-                hottestTemp: 10,
-                coldestTemp: 10
+                summerRainfall: 23,
+                winterRainfall: 10,
+                temperatureDuringSummer: 10,
+                temperatureDuringWinter: 10,
+                temperatureDuringGlobalHottest: 10,
+                temperatureDuringGlobalColdest: 10
             );
 
             Assert.AreEqual("BSh",
@@ -211,37 +198,34 @@ namespace Koppen.Tests
         public void GroupATest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 42,
                 winterRainfall: 42,
-                summerTemp: 18,
-                winterTemp: 18,
-                hottestTemp: 18,
-                coldestTemp: 18
+                temperatureDuringSummer: 18,
+                temperatureDuringWinter: 18,
+                temperatureDuringGlobalHottest: 18,
+                temperatureDuringGlobalColdest: 18
             );
 
             Assert.IsTrue(Koppen.KoppenClassifier.Classify(sample).StartsWith("A"), sample.ToString());
 
             var tooColdSample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 42,
                 winterRainfall: 42,
-                summerTemp: 17,
-                winterTemp: 18,
-                hottestTemp: 18,
-                coldestTemp: 18
+                temperatureDuringSummer: 17,
+                temperatureDuringWinter: 18,
+                temperatureDuringGlobalHottest: 18,
+                temperatureDuringGlobalColdest: 18
             );
 
             Assert.IsFalse(Koppen.KoppenClassifier.Classify(tooColdSample).StartsWith("A"), tooColdSample.ToString());
 
             var tooDrySample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 22,
                 winterRainfall: 22,
-                summerTemp: 18,
-                winterTemp: 18,
-                hottestTemp: 18,
-                coldestTemp: 18
+                temperatureDuringSummer: 18,
+                temperatureDuringWinter: 18,
+                temperatureDuringGlobalHottest: 18,
+                temperatureDuringGlobalColdest: 18
             );
 
             Assert.IsFalse(Koppen.KoppenClassifier.Classify(tooDrySample).StartsWith("A"), tooDrySample.ToString());
@@ -253,13 +237,12 @@ namespace Koppen.Tests
         public void GroupAwTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 43,
                 winterRainfall: 42,
-                summerTemp: 18,
-                winterTemp: 18,
-                hottestTemp: 18,
-                coldestTemp: 18
+                temperatureDuringSummer: 18,
+                temperatureDuringWinter: 18,
+                temperatureDuringGlobalHottest: 18,
+                temperatureDuringGlobalColdest: 18
             );
 
             Assert.AreEqual("Aw", Koppen.KoppenClassifier.Classify(sample), sample.ToString());
@@ -269,13 +252,12 @@ namespace Koppen.Tests
         public void GroupAsTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 42,
                 winterRainfall: 43,
-                summerTemp: 18,
-                winterTemp: 18,
-                hottestTemp: 18,
-                coldestTemp: 18
+                temperatureDuringSummer: 18,
+                temperatureDuringWinter: 18,
+                temperatureDuringGlobalHottest: 18,
+                temperatureDuringGlobalColdest: 18
             );
 
             Assert.AreEqual("As", Koppen.KoppenClassifier.Classify(sample), sample.ToString());
@@ -285,13 +267,12 @@ namespace Koppen.Tests
         public void GroupAfTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 60,
                 winterRainfall: 60,
-                summerTemp: 18,
-                winterTemp: 18,
-                hottestTemp: 18,
-                coldestTemp: 18
+                temperatureDuringSummer: 18,
+                temperatureDuringWinter: 18,
+                temperatureDuringGlobalHottest: 18,
+                temperatureDuringGlobalColdest: 18
             );
 
             Assert.AreEqual("Af", Koppen.KoppenClassifier.Classify(sample), sample.ToString());
@@ -301,13 +282,12 @@ namespace Koppen.Tests
         public void GroupAmTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 120,
                 winterRainfall: 58,
-                summerTemp: 18,
-                winterTemp: 18,
-                hottestTemp: 18,
-                coldestTemp: 18
+                temperatureDuringSummer: 18,
+                temperatureDuringWinter: 18,
+                temperatureDuringGlobalHottest: 18,
+                temperatureDuringGlobalColdest: 18
             );
 
             Assert.AreEqual("Am", Koppen.KoppenClassifier.Classify(sample), sample.ToString());
@@ -317,25 +297,23 @@ namespace Koppen.Tests
         public void GroupCTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 42,
                 winterRainfall: 42,
-                summerTemp: 15,
-                winterTemp: 2,
-                hottestTemp: 16,
-                coldestTemp: 1
+                temperatureDuringSummer: 15,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 16,
+                temperatureDuringGlobalColdest: 1
             );
 
             Assert.IsTrue(Koppen.KoppenClassifier.Classify(sample).StartsWith("C"), sample.ToString());
 
             var tooColdSample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 42,
                 winterRainfall: 42,
-                summerTemp: 12,
-                winterTemp: 2,
-                hottestTemp: 12,
-                coldestTemp: -1
+                temperatureDuringSummer: 12,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 12,
+                temperatureDuringGlobalColdest: -1
                 );
 
             Assert.IsFalse(Koppen.KoppenClassifier.Classify(tooColdSample).StartsWith("C"), tooColdSample.ToString());
@@ -346,37 +324,34 @@ namespace Koppen.Tests
         public void GroupCsTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 20,
                 winterRainfall: 61,
-                summerTemp: 15,
-                winterTemp: 2,
-                hottestTemp: 16,
-                coldestTemp: 1
+                temperatureDuringSummer: 15,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 16,
+                temperatureDuringGlobalColdest: 1
             );
 
             Assert.IsTrue(Koppen.KoppenClassifier.Classify(sample).StartsWith("Cs"), sample.ToString());
 
             var wrongRainRatioSample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 20,
                 winterRainfall: 59,
-                summerTemp: 15,
-                winterTemp: 2,
-                hottestTemp: 16,
-                coldestTemp: 1
+                temperatureDuringSummer: 15,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 16,
+                temperatureDuringGlobalColdest: 1
             );
 
             Assert.IsFalse(Koppen.KoppenClassifier.Classify(wrongRainRatioSample).StartsWith("Cs"), wrongRainRatioSample.ToString());
 
             var tooMuchSummerRainSample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 41,
                 winterRainfall: 124,
-                summerTemp: 15,
-                winterTemp: 2,
-                hottestTemp: 16,
-                coldestTemp: 1
+                temperatureDuringSummer: 15,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 16,
+                temperatureDuringGlobalColdest: 1
             );
 
             Assert.IsFalse(Koppen.KoppenClassifier.Classify(tooMuchSummerRainSample).StartsWith("Cs"), tooMuchSummerRainSample.ToString());
@@ -388,25 +363,23 @@ namespace Koppen.Tests
         public void GroupCwTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 120,
                 winterRainfall: 10,
-                summerTemp: 15,
-                winterTemp: 2,
-                hottestTemp: 16,
-                coldestTemp: 1
+                temperatureDuringSummer: 15,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 16,
+                temperatureDuringGlobalColdest: 1
             );
 
             Assert.IsTrue(Koppen.KoppenClassifier.Classify(sample).StartsWith("Cw"), sample.ToString());
 
             var wrongRainRatioSample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 90,
                 winterRainfall: 20,
-                summerTemp: 15,
-                winterTemp: 2,
-                hottestTemp: 16,
-                coldestTemp: 1
+                temperatureDuringSummer: 15,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 16,
+                temperatureDuringGlobalColdest: 1
             );
 
             Assert.IsFalse(Koppen.KoppenClassifier.Classify(wrongRainRatioSample).StartsWith("Cw"), wrongRainRatioSample.ToString());
@@ -417,13 +390,12 @@ namespace Koppen.Tests
         public void GroupCsaTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 20,
                 winterRainfall: 61,
-                summerTemp: 18,
-                winterTemp: 2,
-                hottestTemp: 22,
-                coldestTemp: 1
+                temperatureDuringSummer: 18,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 22,
+                temperatureDuringGlobalColdest: 1
             );
 
             Assert.AreEqual("Csa", Koppen.KoppenClassifier.Classify(sample), sample.ToString());
@@ -434,13 +406,12 @@ namespace Koppen.Tests
         public void GroupCsbTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 20,
                 winterRainfall: 61,
-                summerTemp: 18,
-                winterTemp: 2,
-                hottestTemp: 17,
-                coldestTemp: 1
+                temperatureDuringSummer: 18,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 17,
+                temperatureDuringGlobalColdest: 1
             );
 
             Assert.AreEqual("Csb", Koppen.KoppenClassifier.Classify(sample), sample.ToString());
@@ -451,13 +422,12 @@ namespace Koppen.Tests
         public void GroupCscTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 20,
                 winterRainfall: 61,
-                summerTemp: 9,
-                winterTemp: 2,
-                hottestTemp: 10,
-                coldestTemp: 1
+                temperatureDuringSummer: 9,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 10,
+                temperatureDuringGlobalColdest: 1
             );
 
             Assert.AreEqual("Csc", Koppen.KoppenClassifier.Classify(sample), sample.ToString());
@@ -467,13 +437,12 @@ namespace Koppen.Tests
         public void GroupDTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 50,
                 winterRainfall: 50,
-                summerTemp: -1,
-                winterTemp: 2,
-                hottestTemp: 16,
-                coldestTemp: 1
+                temperatureDuringSummer: -1,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 16,
+                temperatureDuringGlobalColdest: 1
             );
 
             Assert.IsTrue(Koppen.KoppenClassifier.Classify(sample).StartsWith("D"), sample.ToString());
@@ -484,13 +453,12 @@ namespace Koppen.Tests
         public void GroupDsTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 20,
                 winterRainfall: 61,
-                summerTemp: -1,
-                winterTemp: 2,
-                hottestTemp: 16,
-                coldestTemp: 1
+                temperatureDuringSummer: -1,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 16,
+                temperatureDuringGlobalColdest: 1
             );
 
             Assert.IsTrue(Koppen.KoppenClassifier.Classify(sample).StartsWith("Ds"), sample.ToString());
@@ -501,13 +469,12 @@ namespace Koppen.Tests
         public void GroupDwTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 61,
                 winterRainfall: 6,
-                summerTemp: -1,
-                winterTemp: 2,
-                hottestTemp: 16,
-                coldestTemp: 1
+                temperatureDuringSummer: -1,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 16,
+                temperatureDuringGlobalColdest: 1
             );
 
             Assert.IsTrue(Koppen.KoppenClassifier.Classify(sample).StartsWith("Dw"), sample.ToString());
@@ -517,13 +484,12 @@ namespace Koppen.Tests
         public void GroupDfTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 30,
                 winterRainfall: 30,
-                summerTemp: -1,
-                winterTemp: 2,
-                hottestTemp: 16,
-                coldestTemp: 1
+                temperatureDuringSummer: -1,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 16,
+                temperatureDuringGlobalColdest: 1
             );
 
             Assert.IsTrue(Koppen.KoppenClassifier.Classify(sample).StartsWith("Df"), sample.ToString());
@@ -533,13 +499,12 @@ namespace Koppen.Tests
         public void GroupDsaTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 20,
                 winterRainfall: 61,
-                summerTemp: -1,
-                winterTemp: 2,
-                hottestTemp: 22,
-                coldestTemp: 1
+                temperatureDuringSummer: -1,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 22,
+                temperatureDuringGlobalColdest: 1
             );
 
             Assert.AreEqual("Dsa", Koppen.KoppenClassifier.Classify(sample), sample.ToString());
@@ -550,13 +515,12 @@ namespace Koppen.Tests
         public void GroupDsbTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 20,
                 winterRainfall: 61,
-                summerTemp: 18,
-                winterTemp: 2,
-                hottestTemp: 17,
-                coldestTemp: -1
+                temperatureDuringSummer: 18,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 17,
+                temperatureDuringGlobalColdest: -1
             );
 
             Assert.AreEqual("Dsb", Koppen.KoppenClassifier.Classify(sample), sample.ToString());
@@ -567,13 +531,12 @@ namespace Koppen.Tests
         public void GroupDscTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 20,
                 winterRainfall: 61,
-                summerTemp: 9,
-                winterTemp: 2,
-                hottestTemp: 10,
-                coldestTemp: -1
+                temperatureDuringSummer: 9,
+                temperatureDuringWinter: 2,
+                temperatureDuringGlobalHottest: 10,
+                temperatureDuringGlobalColdest: -1
             );
 
             Assert.AreEqual("Dsc", Koppen.KoppenClassifier.Classify(sample), sample.ToString());
@@ -583,13 +546,12 @@ namespace Koppen.Tests
         public void GroupDsdTest() {
 
             var sample = new WeatherSample(
-                hemisphere: Hemisphere.North,
                 summerRainfall: 20,
                 winterRainfall: 61,
-                summerTemp: 9,
-                winterTemp: -20,
-                hottestTemp: 10,
-                coldestTemp: -38
+                temperatureDuringSummer: 9,
+                temperatureDuringWinter: -20,
+                temperatureDuringGlobalHottest: 10,
+                temperatureDuringGlobalColdest: -38
             );
 
             Assert.AreEqual("Dsd", Koppen.KoppenClassifier.Classify(sample), sample.ToString());

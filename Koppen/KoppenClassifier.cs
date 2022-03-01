@@ -57,7 +57,7 @@ namespace Koppen
 
             }
 
-            string GetPrecipitationForCorD (WeatherSample s) {
+            static string GetPrecipitationForCorD (WeatherSample s) {
                 if (s.RainfallSummer < s.RainfallWinter
                  && s.RainfallWinter > 3 * s.RainfallSummer
                  && s.RainfallSummer < 40)

@@ -60,8 +60,8 @@ namespace Koppen
             //TODO: Make args
             // var summerTemperatureOffset = 0;
             // var winterTemperatureOffset = 0;
-            const short hottestTemperatureOffset = 2;
-            const short coldestTemperatureOffset = -2;
+            const short hottestTemperatureOffset = 0;
+            const short coldestTemperatureOffset = 0;
             //
 
             Directory.SetCurrentDirectory(args[0]);
@@ -79,8 +79,7 @@ namespace Koppen
 
             Console.WriteLine($"Map Resolution: {imageWidth}x{imageHeight} ({sampleCount} Samples)");
 
-            var climateMaps = InitializeClimateMaps(
-                imageWidth, imageHeight);
+            var climateMaps = InitializeClimateMaps();
 
             Console.Write("Loading Maps... ");
 
@@ -105,14 +104,9 @@ namespace Koppen
                 {
                     if (landMask[x, y].PackedValue == transparent) return;
 
-                    var sampleHemisphere = y <= halfHeight
-                        ? Hemisphere.North
-                        : Hemisphere.South;
-
                     //TODO: Check bounds given offsets
                     //TODO: use summer and winter offsets
                     var sample = new WeatherSample(
-                        sampleHemisphere,
                         ToRainfall(ReadPixel(summerRain, x, y)),
                         ToRainfall(ReadPixel(winterRain, x, y)),
                         ToTemperature(ReadPixel(summerTemperature, x, y)),
@@ -189,16 +183,24 @@ namespace Koppen
             if (!Directory.Exists(_outDir))
                 Directory.CreateDirectory(_outDir);
 
-            foreach (var zone in climateMaps.Keys) {
-            //Parallel.ForEach(climateMaps.Keys, zone => { // uses too much memory, mostly just crashes
-                SaveClimateZoneMap(climateMaps[zone], zone, imageWidth, imageHeight);
-                Console.WriteLine($"{zone} ✓");
+            foreach (var zone in climateMaps.Keys) 
+            {
+                Console.Write($"{zone}...");
+                if(SaveClimateZoneMap(climateMaps[zone], zone, imageWidth, imageHeight))
+                {
+                    Console.WriteLine("✓");
+                }
+                else
+                {
+                    Console.WriteLine("(None Found)");
+                }
             }
-            //);
 
         }
 
-        static void SaveClimateZoneMap(ConcurrentQueue<Vec2Int> climateMap, string zoneName, int w, int h) {
+        static bool SaveClimateZoneMap(ConcurrentQueue<Vec2Int> climateMap, string zoneName, int w, int h) {
+
+            if (climateMap.IsEmpty) return false;
 
             var zoneColor = new Rgba32(
                 ZoneColors[zoneName][0], 
@@ -206,14 +208,16 @@ namespace Koppen
                 ZoneColors[zoneName][2], 
                 ZoneColors[zoneName][3]);
 
-            using (var img = new Image<Rgba32>(w,h)) 
+            using var img = new Image<Rgba32>(w, h); 
+
+            foreach (var zonePixel in climateMap)
             {
-                foreach(var zonePixel in climateMap)
-                {
-                    img[zonePixel.x, zonePixel.y] = zoneColor;
-                }
-                img.Save(Path.Join(_outDir, $"{zoneName}.png"));
+                img[zonePixel.x, zonePixel.y] = zoneColor;
             }
+
+            img.Save(Path.Join(_outDir, $"{zoneName}.png"));
+
+            return true;
         }
 
         //pixel value from 0 - 255 => temperature value in C from -45 to 55
@@ -229,7 +233,7 @@ namespace Koppen
             return (byte)(pixelValue * RainScale);
         }
 
-        static Dictionary<string, ConcurrentQueue<Vec2Int>> InitializeClimateMaps(int width, int height) {
+        static Dictionary<string, ConcurrentQueue<Vec2Int>> InitializeClimateMaps() {
             var maps = new Dictionary<string, ConcurrentQueue<Vec2Int>>();
 
             foreach (var zone in ZoneColors.Keys)
