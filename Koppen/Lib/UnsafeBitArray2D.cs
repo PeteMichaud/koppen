@@ -7,7 +7,7 @@ namespace Koppen
 {
     public class UnsafeBitArray2D
     {
-        private BitArray _array;
+        private readonly BitArray _array;
         protected int _dimension1;
         protected int _dimension2;
 

@@ -15,44 +15,44 @@ namespace Koppen
         static string _outDir;
         static string _inDir;
 
-        static readonly Dictionary<string, byte[]> ZoneColors = new Dictionary<string, byte[]> {
+        static readonly Dictionary<string, Rgba32> ZoneColors = new Dictionary<string, Rgba32> {
             //Bytes are RGBA values for the koppen color scheme
 
-            { "Af", new byte[] { 1, 33, 244 , 255 } },
-            { "Am", new byte[] { 1, 108, 244 , 255 } },
-            { "As", new byte[] { 36, 145, 221 , 255 } },
-            { "Aw", new byte[] { 92, 169, 222 , 255 } },
+            { "Af", new Rgba32(1, 33, 244) },
+            { "Am", new Rgba32(1, 108, 244) },
+            { "As", new Rgba32(36, 145, 221) },
+            { "Aw", new Rgba32(92, 169, 222) },
 
-            { "BWh", new byte[] { 255, 1, 26 , 255 } },
-            { "BWk", new byte[] { 255, 138, 139 , 255 } },
-            { "BSh", new byte[] { 248, 150, 42 , 255 } },
-            { "BSk", new byte[] { 228, 189, 91 , 255 } },
+            { "BWh", new Rgba32(255, 1, 26) },
+            { "BWk", new Rgba32(255, 138, 139) },
+            { "BSh", new Rgba32(248, 150, 42) },
+            { "BSk", new Rgba32(228, 189, 91) },
 
-            { "Cfa", new byte[] { 189, 252, 87 , 255 } },
-            { "Cfb", new byte[] { 81, 251, 70 , 255 } },
-            { "Cfc", new byte[] { 38, 189, 41 , 255 } },
-            { "Cwa", new byte[] { 133, 252, 148 , 255 } },
-            { "Cwb", new byte[] { 80, 190, 97 , 255 } },
-            { "Cwc", new byte[] { 43, 138, 53 , 255 } },
-            { "Csa", new byte[] { 253, 251, 62 , 255 } },
-            { "Csb", new byte[] { 201, 195, 49 , 255 } },
-            { "Csc", new byte[] { 133, 131, 34 , 255 } },
+            { "Cfa", new Rgba32(189, 252, 87) },
+            { "Cfb", new Rgba32(81, 251, 70) },
+            { "Cfc", new Rgba32(38, 189, 41) },
+            { "Cwa", new Rgba32(133, 252, 148) },
+            { "Cwb", new Rgba32(80, 190, 97) },
+            { "Cwc", new Rgba32(43, 138, 53) },
+            { "Csa", new Rgba32(253, 251, 62) },
+            { "Csb", new Rgba32(201, 195, 49) },
+            { "Csc", new Rgba32(133, 131, 34) },
 
-            { "Dfa", new byte[] { 1, 252, 251 , 255 } },
-            { "Dfb", new byte[] { 38, 192, 245 , 255 } },
-            { "Dfc", new byte[] { 1, 115, 114 , 255 } },
-            { "Dfd", new byte[] { 1, 62, 84 , 255 } },
-            { "Dwa", new byte[] { 153, 168, 250 , 255 } },
-            { "Dwb", new byte[] { 59, 112, 217 , 255 } },
-            { "Dwc", new byte[] { 61, 72, 166 , 255 } },
-            { "Dwd", new byte[] { 41, 16, 123 , 255 } },
-            { "Dsa", new byte[] { 255, 30, 244 , 255 } },
-            { "Dsb", new byte[] { 196, 22, 184 , 255 } },
-            { "Dsc", new byte[] { 143, 48, 136 , 255 } },
-            { "Dsd", new byte[] { 132, 84, 133 , 255 } },
+            { "Dfa", new Rgba32(1, 252, 251) },
+            { "Dfb", new Rgba32(38, 192, 245) },
+            { "Dfc", new Rgba32(1, 115, 114) },
+            { "Dfd", new Rgba32(1, 62, 84) },
+            { "Dwa", new Rgba32(153, 168, 250) },
+            { "Dwb", new Rgba32(59, 112, 217) },
+            { "Dwc", new Rgba32(61, 72, 166) },
+            { "Dwd", new Rgba32(41, 16, 123) },
+            { "Dsa", new Rgba32(255, 30, 244) },
+            { "Dsb", new Rgba32(196, 22, 184) },
+            { "Dsc", new Rgba32(143, 48, 136) },
+            { "Dsd", new Rgba32(132, 84, 133) },
 
-            { "ET", new byte[] { 148, 148, 148 , 255 } },
-            { "EF", new byte[] { 84, 84, 84 , 255 } },
+            { "ET", new Rgba32(148, 148, 148) },
+            { "EF", new Rgba32(84, 84, 84) },
         };
 
         static void Main(string[] args) {
@@ -202,17 +202,11 @@ namespace Koppen
 
             if (climateMap.IsEmpty) return false;
 
-            var zoneColor = new Rgba32(
-                ZoneColors[zoneName][0], 
-                ZoneColors[zoneName][1], 
-                ZoneColors[zoneName][2], 
-                ZoneColors[zoneName][3]);
-
             using var img = new Image<Rgba32>(w, h); 
 
             foreach (var zonePixel in climateMap)
             {
-                img[zonePixel.x, zonePixel.y] = zoneColor;
+                img[zonePixel.x, zonePixel.y] = ZoneColors[zoneName];
             }
 
             img.Save(Path.Join(_outDir, $"{zoneName}.png"));
