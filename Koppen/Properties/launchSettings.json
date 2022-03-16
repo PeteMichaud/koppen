@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Koppen": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\Sync\\LandfallMap\\Koppen"
+    }
+  }
+}

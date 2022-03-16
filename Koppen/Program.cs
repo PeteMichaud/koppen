@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 
 namespace Koppen
 {
@@ -14,6 +15,9 @@ namespace Koppen
     {
         static string _outDir;
         static string _inDir;
+
+        static readonly short[] TemperatureLookup = new short[256];
+        static readonly byte[] RainfallLookup = new byte[256];
 
         static readonly Dictionary<string, Rgba32> ZoneColors = new Dictionary<string, Rgba32> {
             //Bytes are RGBA values for the koppen color scheme
@@ -56,6 +60,16 @@ namespace Koppen
         };
 
         static void Main(string[] args) {
+            //precaching all possible values
+            var max = (byte)255;
+            for (byte i = 0; i < max; i++)
+            {
+                TemperatureLookup[i] = ToTemperature(i);
+                RainfallLookup[i] = ToRainfall(i);
+            }
+            TemperatureLookup[255] = ToTemperature(255);
+            RainfallLookup[255] = ToRainfall(255);
+            //end precache
 
             //TODO: Make args
             // var summerTemperatureOffset = 0;
@@ -107,13 +121,13 @@ namespace Koppen
                     //TODO: Check bounds given offsets
                     //TODO: use summer and winter offsets
                     var sample = new WeatherSample(
-                        ToRainfall(ReadPixel(summerRain, x, y)),
-                        ToRainfall(ReadPixel(winterRain, x, y)),
-                        ToTemperature(ReadPixel(summerTemperature, x, y)),
-                        ToTemperature(ReadPixel(winterTemperature, x, y)),
-                        (short)(ToTemperature(ReadPixel(hottestTemperature, x, y)) +
+                        RainfallLookup[ReadPixel(summerRain, x, y)],
+                        RainfallLookup[ReadPixel(winterRain, x, y)],
+                        TemperatureLookup[ReadPixel(summerTemperature, x, y)],
+                        TemperatureLookup[ReadPixel(winterTemperature, x, y)],
+                        (short)(TemperatureLookup[ReadPixel(hottestTemperature, x, y)] +
                                  hottestTemperatureOffset),
-                        (short)(ToTemperature(ReadPixel(coldestTemperature, x, y)) +
+                        (short)(TemperatureLookup[ReadPixel(coldestTemperature, x, y)] +
                                  coldestTemperatureOffset)
                     );
 
@@ -174,6 +188,7 @@ namespace Koppen
             return Image.Load<L8>(Path.Join(_inDir, fileName));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static byte ReadPixel(Image<L8> pixels, int x, int y)
         {
             return pixels[x, y].PackedValue;
@@ -202,11 +217,11 @@ namespace Koppen
 
             if (climateMap.IsEmpty) return false;
 
-            using var img = new Image<Rgba32>(w, h); 
-
+            using var img = new Image<Rgba32>(w, h);
+            var zoneColor = ZoneColors[zoneName];
             foreach (var zonePixel in climateMap)
             {
-                img[zonePixel.x, zonePixel.y] = ZoneColors[zoneName];
+                img[zonePixel.x, zonePixel.y] = zoneColor;
             }
 
             img.Save(Path.Join(_outDir, $"{zoneName}.png"));
@@ -216,13 +231,16 @@ namespace Koppen
 
         //pixel value from 0 - 255 => temperature value in C from -45 to 55
         const float TempScale = 2.55f;
-        const short TempOffset = -45;
+        const float TempOffset = -45f;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static short ToTemperature(byte pixelValue) {
             return (short)(pixelValue / TempScale + TempOffset);
         }
 
+
         //pixel value from 0 - 255 => rainfall value in mm from 0 to 200
         const float RainScale = 0.784f; // 200/255 == 0.7843137255
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static byte ToRainfall(byte pixelValue) {
             return (byte)(pixelValue * RainScale);
         }
